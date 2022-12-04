@@ -3,12 +3,14 @@ import {useEffect, useState} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 
 
 function App() {
   const MAX_LENGTH = 26 
-  let text="This text can be up to 40 characters!!!!"
+  let text="This text can be up to 40 characters!!!"
   let width = 900;
 
   const [windowSize, setWindowSize] = useState(getWindowSize());
@@ -30,6 +32,12 @@ function App() {
     return {innerWidth, innerHeight};
   }
 
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {text}
+    </Tooltip>
+  );
+
   return (
     <div className="App">
      
@@ -38,17 +46,25 @@ function App() {
           <Col xs sm="8" md="8" lg="8" className='pe-1 d-inline-block'>
              {windowSize.innerWidth < width ?
         (
-          <>
+          <OverlayTrigger
+            placement="bottom"
+            delay={{ show: 200, hide: 300 }}
+            overlay={renderTooltip}
+          >
             <Button className="me-3 mb-3">{`${text.substring(0, MAX_LENGTH)}...`}</Button>
-          </>    
+          </OverlayTrigger>   
         ) :
         <Button className="me-3">{text}</Button>  
       }
        {windowSize.innerWidth < width ?
         (
-          <>
-            <Button className="me-3 mb-3">{`${text.substring(0, MAX_LENGTH)}...`}</Button>{" "}
-          </>    
+          <OverlayTrigger
+          placement="bottom"
+          delay={{ show: 200, hide: 300 }}
+          overlay={renderTooltip}
+        >
+          <Button className="me-3 mb-3">{`${text.substring(0, MAX_LENGTH)}...`}</Button>
+        </OverlayTrigger>    
         ) :
         <Button className="me-3">{text}</Button>    
       }
